@@ -1,0 +1,10 @@
+Redux 사용하기.
+
+fs - electron - ipc - 렌더러 - 이벤트 구조 만들기.
+
+보내기 전
+
+브러쉬로 색깔 정해서 그릴 수 있어야 함 (Color picker)
+
+레이어 시스템 (image랑 brushing layer를 구분해야 함.)
+
