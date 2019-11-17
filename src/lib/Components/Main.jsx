@@ -1,8 +1,11 @@
 import React, { useState, useCallback } from "react";
 import { remote } from "electron";
 import { css } from "emotion";
-import { Button, ButtonGroup, Navbar } from "reactstrap";
+import { Button } from "reactstrap";
 import SelectedImage from "./SelectedImage";
+import Topbar from "./Topbar";
+import { SketchPicker } from "react-color";
+import Canvas from './Canvas';
 
 const Main = () => {
   const [state, setState] = useState(0);
@@ -12,44 +15,53 @@ const Main = () => {
     const { filePaths } = await remote.dialog.showOpenDialog();
 
     if (filePaths.length) {
-      setState(1);
       setPath(filePaths[0]);
+      setState(1);
     }
   }, [setState, setPath]);
 
-  return state ? (
-    <SelectedImage path={path} />
-  ) : (
+  return (
     <>
-      <Navbar color="dark" dark expand="md">
-        <ButtonGroup>
-          <Button color="secondary">Pen</Button>
-          <Button color="secondary">Liner</Button>
-          <Button color="secondary">Color</Button>
-          <Button color="secondary">Eraser</Button>
-          <Button color="secondary">Run</Button>
-        </ButtonGroup>
-      </Navbar>
-      <div className={style}>
-        <div className={innerDiv}>
-          <Button color="primary" onClick={selectFile}>
-            Select file
-          </Button>
-        </div>
+      <Topbar />
+      <div className={bodyDiv}>
+        {state ? (
+          <>
+          <SelectedImage filePath={path} />
+          <Canvas/>
+          </>
+        ) : (
+          <article className={style}>
+            <div className={innerDiv}>
+              <Button color="primary" onClick={selectFile}>
+                Select file
+              </Button>
+            </div>
+          </article>
+        )}
+        <aside className={pickerStyle}>
+          <SketchPicker />
+        </aside>
       </div>
     </>
   );
 };
+const bodyDiv = css`
+  display: flex;
+  flex-direction: row;
+  height: 90%;
+  max-width: 100%;  
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+`;
 
 const style = css`
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  width: 100%;
+  height: 100%;
   justify-content: center;
   display: flex;
   flex-direction: column;
+  float: left;
 `;
 
 const innerDiv = css`
@@ -57,4 +69,11 @@ const innerDiv = css`
   display: flex;
 `;
 
+const pickerStyle = css`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background: darkgray;
+  border: 2px solid darkgray;
+`;
 export default Main;
