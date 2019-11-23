@@ -5,7 +5,7 @@ import { Button } from "reactstrap";
 import SelectedImage from "./SelectedImage";
 import Topbar from "./Topbar";
 import { SketchPicker } from "react-color";
-import Canvas from './Canvas';
+import Canvas from "./Canvas";
 
 const Main = () => {
   const [state, setState] = useState(0);
@@ -25,10 +25,9 @@ const Main = () => {
       <Topbar />
       <div className={bodyDiv}>
         {state ? (
-          <>
-          <SelectedImage filePath={path} />
-          <Canvas/>
-          </>
+          <div className={main}>
+            <Canvas imagePath={path} />
+          </div>
         ) : (
           <article className={style}>
             <div className={innerDiv}>
@@ -49,10 +48,14 @@ const bodyDiv = css`
   display: flex;
   flex-direction: row;
   height: 90%;
-  max-width: 100%;  
+  max-width: 100%;
   display: flex;
   justify-content: space-between;
   position: relative;
+`;
+
+const main = css`
+  width: 100%;
 `;
 
 const style = css`
