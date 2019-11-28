@@ -2,10 +2,10 @@ import React, { useState, useCallback } from "react";
 import { remote } from "electron";
 import { css } from "emotion";
 import { Button } from "reactstrap";
-import SelectedImage from "./SelectedImage";
+// import SelectedImage from "./SelectedImage";
 import Topbar from "./Topbar";
-import { SketchPicker } from "react-color";
 import Canvas from "./Canvas";
+import Sidebar from "../Tools/Sidebar";
 
 const Main = () => {
   const [state, setState] = useState(0);
@@ -25,9 +25,7 @@ const Main = () => {
       <Topbar />
       <div className={bodyDiv}>
         {state ? (
-          <div className={main}>
-            <Canvas imagePath={path} />
-          </div>
+          <Canvas imagePath={path} />
         ) : (
           <article className={style}>
             <div className={innerDiv}>
@@ -37,9 +35,7 @@ const Main = () => {
             </div>
           </article>
         )}
-        <aside className={pickerStyle}>
-          <SketchPicker />
-        </aside>
+        <Sidebar />
       </div>
     </>
   );
@@ -52,10 +48,6 @@ const bodyDiv = css`
   display: flex;
   justify-content: space-between;
   position: relative;
-`;
-
-const main = css`
-  width: 100%;
 `;
 
 const style = css`
@@ -72,11 +64,4 @@ const innerDiv = css`
   display: flex;
 `;
 
-const pickerStyle = css`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  background: darkgray;
-  border: 2px solid darkgray;
-`;
 export default Main;

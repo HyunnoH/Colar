@@ -1,6 +1,8 @@
 import { combineReducers } from "redux";
-import file from "./file";
+import CanvasStyle from "./CanvasStyle";
+import PenType from "./PenType";
 
 export default combineReducers({
-  file
+  CanvasStyle,
+  PenType
 });
