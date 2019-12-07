@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
-import { Image } from "react-konva";
-
-const Drawing = ({ color, penType, thickness }) => {
+import React, { useState, useLayoutEffect, useCallback, useRef } from "react";
+import { css } from "emotion";
+const Drawing = ({ color, penType, thickness, width }) => {
   const [isDrawing, setIsDrawing] = useState(false);
   const [canvas, setCanvas] = useState(null);
   const [context, setContext] = useState(null);
@@ -9,30 +8,27 @@ const Drawing = ({ color, penType, thickness }) => {
   const imgRef = useRef(null);
   const lastPointerPositionRef = useRef(null);
 
-  useEffect(() => {
-    // console.log(color, penType);
-    const canvas = document.createElement("canvas");
-    canvas.width = 300;
+  useLayoutEffect(() => {
+    const canvas = imgRef.current;
+    canvas.width = width;
     canvas.height = 300;
     const context = canvas.getContext("2d");
 
     setCanvas(canvas);
     setContext(context);
-  }, [setCanvas, setContext]);
+  }, [setCanvas, setContext, width]);
 
   const handleMouseDown = () => {
-    console.log(penType);
+    // console.log(penType);
     setIsDrawing(true);
-
-    const stage = imgRef.current.parent.parent;
-    lastPointerPositionRef.current = stage.getPointerPosition();
+    console.log(imgRef.current.x);
   };
 
-  const handleMouseUp = useCallback(() => {
+  const handleMouseUp = () => {
     setIsDrawing(false);
-  }, [setIsDrawing]);
+  };
 
-  const handleMouseMove = useCallback(() => {
+  const handleMouseMove = () => {
     if (isDrawing) {
       context.strokeStyle = color;
       context.lineJoin = "round";
@@ -43,43 +39,42 @@ const Drawing = ({ color, penType, thickness }) => {
       } else if (penType === "eraser") {
         context.globalCompositeOperation = "destination-out";
       }
-      context.beginPath();
 
-      var localPos = {
-        x: lastPointerPositionRef.current.x - imgRef.current.x(),
-        y: lastPointerPositionRef.current.y - imgRef.current.y()
-      };
-      // console.log("moveTo", localPos);
-      context.moveTo(localPos.x, localPos.y);
+      console.log();
+      // context.beginPath();
 
-      // TODO: improve
-      const stage = imgRef.current.parent.parent;
-
-      var pos = stage.getPointerPosition();
-      localPos = {
-        x: pos.x - imgRef.current.x(),
-        y: pos.y - imgRef.current.y()
-      };
-      // console.log("lineTo", localPos);
-      context.lineTo(localPos.x, localPos.y);
-      context.closePath();
-      context.stroke();
-      lastPointerPositionRef.current = pos;
-      imgRef.current.getLayer().draw();
+      // var localPos = {
+      //   x: lastPointerPositionRef.current.x - imgRef.current.x(),
+      //   y: lastPointerPositionRef.current.y - imgRef.current.y()
+      // };
+      // // console.log("moveTo", localPos);
+      // context.moveTo(localPos.x, localPos.y);
+      // // TODO: improve
+      // const stage = imgRef.current.parent.parent;
+      // var pos = stage.getPointerPosition();
+      // localPos = {
+      //   x: pos.x - imgRef.current.x(),
+      //   y: pos.y - imgRef.current.y()
+      // };
+      // // console.log("lineTo", localPos);
+      // context.lineTo(localPos.x, localPos.y);
+      // context.closePath();
+      // context.stroke();
+      // lastPointerPositionRef.current = pos;
+      // imgRef.current.getLayer().draw();
     }
-  }, [context, isDrawing, penType, color, thickness]);
+  };
 
   return (
-    <Image
-      image={canvas}
+    <canvas
       ref={imgRef}
-      width={300}
-      height={300}
-      stroke="blue"
+      className={canvasStyle}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
       onMouseMove={handleMouseMove}
     />
   );
 };
+
+const canvasStyle = css``;
 export default Drawing;
