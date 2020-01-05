@@ -27,8 +27,13 @@ const Main = () => {
         {state ? (
           <Canvas imagePath={path} />
         ) : (
-          <article className={style}>
+          <article className={articleStyle}>
             <div className={innerDiv}>
+              <h1 className={Title}>Colar</h1>
+              <span className={subtitle}>
+                User-friendly image auto-painting app
+              </span>
+              <br />
               <Button color="primary" onClick={selectFile}>
                 Select file
               </Button>
@@ -50,18 +55,29 @@ const bodyDiv = css`
   position: relative;
 `;
 
-const style = css`
+const articleStyle = css`
   width: 100%;
   height: 100%;
   justify-content: center;
   display: flex;
   flex-direction: column;
   float: left;
+  align-items: center;
 `;
 
 const innerDiv = css`
+  width: 30vw;
   justify-content: center;
   display: flex;
+  flex-direction: column;
+  text-align: center;
 `;
 
+const Title = css`
+  font-size: 5rem;
+`;
+
+const subtitle = css`
+  font-size: 1.5rem;
+`;
 export default Main;

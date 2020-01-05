@@ -17,7 +17,7 @@ const SliderContainer = () => {
       min="1"
       max="40"
       onInput={handleSliderChange}
-      displayValue={selectedThickness.thickness}
+      displayValue={String(selectedThickness.thickness)}
     />
   );
 };
