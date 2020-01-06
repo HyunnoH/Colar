@@ -19,9 +19,12 @@ const Drawing = ({ width, height }) => {
   }, []);
 
   const handleMouseDown = e => {
+    const temp = document.getElementsByTagName("div")[2];
+    console.log(temp.scrollLeft, temp.scrollTop);
+
     prev.current = curr.current;
-    console.log(e);
-    console.log(e.clientX, e.clientY, e.pageX, e.pageY);
+
+    console.log(canvasRef.current.scrollLeft, canvasRef.current.scrollTop);
     curr.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
     const { x, y } = curr.current;
 
@@ -74,8 +77,7 @@ const Drawing = ({ width, height }) => {
 
 const canvasStyle = css`
   position: absolute;
-  border: 1px solid black;
-  overflow: auto;
+  overflow: hidden;
 `;
 
 export default Drawing;
