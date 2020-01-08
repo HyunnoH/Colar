@@ -2,10 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { css } from "emotion";
 
-const Drawing = ({ width, height }) => {
+const Drawing = ({ width, height, scrollPosition }) => {
   const [rect, setRect] = useState();
 
   const canvasStore = useSelector(state => state.CanvasStyle);
+  const pentypeStore = useSelector(state => state.PenType);
 
   const ctx = useRef();
   const prev = useRef({ x: 0, y: 0 });
@@ -19,13 +20,8 @@ const Drawing = ({ width, height }) => {
   }, []);
 
   const handleMouseDown = e => {
-    const temp = document.getElementsByTagName("div")[2];
-    console.log(temp.scrollLeft, temp.scrollTop);
+    updatePosition(e);
 
-    prev.current = curr.current;
-
-    console.log(canvasRef.current.scrollLeft, canvasRef.current.scrollTop);
-    curr.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
     const { x, y } = curr.current;
 
     isDrawing.current = true;
@@ -35,17 +31,21 @@ const Drawing = ({ width, height }) => {
     ctx.current.lineCap = "round";
 
     ctx.current.beginPath();
-    ctx.current.fillRect(x, y, 2, 2);
+    if (pentypeStore.penType === "eraser") {
+      ctx.current.clearRect(x, y, 2, 2);
+    } else {
+      ctx.current.fillRect(x, y, 2, 2);
+    }
     ctx.current.closePath();
   };
 
   const handleMouseMove = e => {
     if (!isDrawing.current) return;
 
-    prev.current = curr.current;
-    curr.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
-
-    draw();
+    if (pentypeStore.penType === "brush") {
+      updatePosition(e);
+      draw();
+    }
   };
 
   const draw = () => {
@@ -58,8 +58,21 @@ const Drawing = ({ width, height }) => {
     ctx.current.closePath();
   };
 
-  const handleMouseUp = () => {
+  const handleMouseUp = e => {
     isDrawing.current = false;
+
+    if (pentypeStore.penType === "line") {
+      updatePosition(e);
+      draw();
+    }
+  };
+
+  const updatePosition = e => {
+    prev.current = curr.current;
+    curr.current = {
+      x: e.clientX - rect.left + scrollPosition.left,
+      y: e.clientY - rect.top + scrollPosition.top
+    };
   };
 
   return (
@@ -78,6 +91,7 @@ const Drawing = ({ width, height }) => {
 const canvasStyle = css`
   position: absolute;
   overflow: hidden;
+  z-index: 3;
 `;
 
 export default Drawing;

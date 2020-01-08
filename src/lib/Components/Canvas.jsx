@@ -5,14 +5,24 @@ import Drawing from "../Tools/Drawing";
 const Canvas = ({ imagePath }) => {
   const [width, setWidth] = useState();
   const [height, setHeight] = useState();
+  const [scrollPosition, setScrollPosition] = useState({ left: 0, top: 0 });
+
+  const divRef = useRef();
 
   useEffect(() => {
     const bg = new window.Image();
     bg.src = imagePath;
   }, [imagePath]);
 
+  const updateScrollPosition = () => {
+    setScrollPosition({
+      left: divRef.current.scrollLeft,
+      top: divRef.current.scrollTop
+    });
+  };
+
   return (
-    <div className={stageClass}>
+    <div ref={divRef} className={stageClass} onScroll={updateScrollPosition}>
       <img
         src={imagePath}
         alt={imagePath}
@@ -22,7 +32,7 @@ const Canvas = ({ imagePath }) => {
           setHeight(e.target.scrollHeight);
         }}
       />
-      <Drawing width={width} height={height} />
+      <Drawing width={width} height={height} scrollPosition={scrollPosition} />
     </div>
   );
 };
@@ -35,6 +45,6 @@ const stageClass = css`
 
 const imageClass = css`
   position: absolute;
-  z-index: -1;
+  z-index: 2;
 `;
 export default Canvas;

@@ -15,6 +15,10 @@ function createWindow() {
     }
   });
 
+  // BrowserWindow.addDevToolsExtension(
+  //   "/Users/hyunn/AppData/Local/Google/Chrome/User Data/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.3.0_0"
+  // );
+
   mainWindow.loadURL(
     isDev
       ? "http://localhost:3000"
