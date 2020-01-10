@@ -6,12 +6,13 @@ const Drawing = ({ width, height, scrollPosition }) => {
   const [rect, setRect] = useState();
 
   const canvasStore = useSelector(state => state.CanvasStyle);
-  const pentypeStore = useSelector(state => state.PenType);
+  const backgroundImgState = useSelector(state => state.ImageState);
 
   const ctx = useRef();
   const prev = useRef({ x: 0, y: 0 });
   const curr = useRef({ x: 0, y: 0 });
   const canvasRef = useRef();
+  const isEntered = useRef(false);
   const isDrawing = useRef(false);
 
   useEffect(() => {
@@ -31,7 +32,7 @@ const Drawing = ({ width, height, scrollPosition }) => {
     ctx.current.lineCap = "round";
 
     ctx.current.beginPath();
-    if (pentypeStore.penType === "eraser") {
+    if (canvasStore.penType === "eraser") {
       ctx.current.clearRect(x, y, 2, 2);
     } else {
       ctx.current.fillRect(x, y, 2, 2);
@@ -42,9 +43,19 @@ const Drawing = ({ width, height, scrollPosition }) => {
   const handleMouseMove = e => {
     if (!isDrawing.current) return;
 
-    if (pentypeStore.penType === "brush") {
-      updatePosition(e);
+    updatePosition(e);
+    if (canvasStore.penType === "brush") {
       draw();
+    } else if (canvasStore.penType === "eraser") {
+      const { x, y } = curr.current;
+      ctx.current.beginPath();
+      ctx.current.clearRect(
+        x - canvasStore.thickness / 2,
+        y - canvasStore.thickness / 2,
+        canvasStore.thickness,
+        canvasStore.thickness
+      );
+      ctx.current.closePath();
     }
   };
 
@@ -61,7 +72,7 @@ const Drawing = ({ width, height, scrollPosition }) => {
   const handleMouseUp = e => {
     isDrawing.current = false;
 
-    if (pentypeStore.penType === "line") {
+    if (canvasStore.penType === "line") {
       updatePosition(e);
       draw();
     }
@@ -75,6 +86,14 @@ const Drawing = ({ width, height, scrollPosition }) => {
     };
   };
 
+  const handleMouseEnter = () => {
+    isEntered.current = true;
+  };
+
+  const handleMouseOut = () => {
+    isEntered.current = false;
+  };
+
   return (
     <canvas
       ref={canvasRef}
@@ -82,8 +101,10 @@ const Drawing = ({ width, height, scrollPosition }) => {
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       className={canvasStyle}
-      width={width}
-      height={height}
+      width={backgroundImgState.width}
+      height={backgroundImgState.height}
+      onMouseEnter={handleMouseEnter}
+      onMouseOut={handleMouseOut}
     />
   );
 };

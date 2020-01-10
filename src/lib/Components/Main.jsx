@@ -5,7 +5,7 @@ import { Button } from "reactstrap";
 // import SelectedImage from "./SelectedImage";
 import Topbar from "./Topbar";
 import Canvas from "./Canvas";
-import Sidebar from "../Tools/Sidebar";
+import Sidebar from "./Sidebar";
 
 const Main = () => {
   const [state, setState] = useState(0);

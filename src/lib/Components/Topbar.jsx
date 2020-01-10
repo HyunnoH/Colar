@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { Button, ButtonGroup, Navbar } from "reactstrap";
-import { changePenType } from "../../store/PenType";
+import { changePenType } from "../../store/CanvasStyle";
 
 const Topbar = () => {
   const dispatch = useDispatch();
@@ -9,6 +9,8 @@ const Topbar = () => {
   const handleTypeChange = type => {
     dispatch(changePenType(type));
   };
+
+  const sendToServer = () => {};
 
   return (
     <Navbar color="dark" dark expand="md">
@@ -22,7 +24,9 @@ const Topbar = () => {
         <Button color="secondary" onClick={() => handleTypeChange("eraser")}>
           Eraser
         </Button>
-        <Button color="secondary">Run</Button>
+        <Button color="secondary" onClick={() => sendToServer()}>
+          Run
+        </Button>
       </ButtonGroup>
     </Navbar>
   );
