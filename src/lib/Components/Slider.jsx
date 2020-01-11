@@ -1,15 +1,16 @@
 import React from "react";
 import { css } from "emotion";
 
-const Slider = ({ min, max, onInput, displayValue }) => {
+const Slider = ({ min, max, value, onChange, displayValue }) => {
   return (
     <div className={outerDivStyle}>
       <input
         type="range"
         min={min}
         max={max}
+        value={value}
         className={inputStyle}
-        onInput={onInput}
+        onChange={onChange}
         id="slider"
       />
       <span>{displayValue}</span>

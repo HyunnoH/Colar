@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { css } from "emotion";
+import { setCanvas, setContext } from "../../store/CanvasInfo";
 
 const Drawing = ({ width, height, scrollPosition }) => {
   const [rect, setRect] = useState();
@@ -14,15 +15,19 @@ const Drawing = ({ width, height, scrollPosition }) => {
   const canvasRef = useRef();
   const isEntered = useRef(false);
   const isDrawing = useRef(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     ctx.current = canvasRef.current.getContext("2d");
     setRect(canvasRef.current.getBoundingClientRect());
+    dispatch(setContext(ctx.current));
+    dispatch(setCanvas(canvasRef.current));
   }, []);
 
   const handleMouseDown = e => {
-    updatePosition(e);
+    if (e.button) return;
 
+    updatePosition(e);
     const { x, y } = curr.current;
 
     isDrawing.current = true;
@@ -33,7 +38,16 @@ const Drawing = ({ width, height, scrollPosition }) => {
 
     ctx.current.beginPath();
     if (canvasStore.penType === "eraser") {
-      ctx.current.clearRect(x, y, 2, 2);
+      ctx.current.arc(x, y, canvasStore.thickness, 0, Math.PI * 2);
+      ctx.current.clip();
+      ctx.current.clearRect(
+        0,
+        0,
+        ctx.current.scrollWidth,
+        ctx.current.scrollHeight
+      );
+      ctx.current.restore();
+      // ctx.current.resetClip();
     } else {
       ctx.current.fillRect(x, y, 2, 2);
     }
@@ -41,8 +55,7 @@ const Drawing = ({ width, height, scrollPosition }) => {
   };
 
   const handleMouseMove = e => {
-    if (!isDrawing.current) return;
-
+    if (!isDrawing.current || canvasStore.penType === "line") return;
     updatePosition(e);
     if (canvasStore.penType === "brush") {
       draw();
@@ -59,6 +72,16 @@ const Drawing = ({ width, height, scrollPosition }) => {
     }
   };
 
+  const handleMouseUp = e => {
+    isDrawing.current = false;
+
+    if (canvasStore.penType === "line") {
+      updatePosition(e);
+      // console.log(prev.current, curr.current);
+      draw();
+    }
+  };
+
   const draw = () => {
     ctx.current.beginPath();
     ctx.current.moveTo(prev.current.x, prev.current.y);
@@ -67,15 +90,6 @@ const Drawing = ({ width, height, scrollPosition }) => {
     ctx.current.lineWidth = canvasStore.thickness;
     ctx.current.stroke();
     ctx.current.closePath();
-  };
-
-  const handleMouseUp = e => {
-    isDrawing.current = false;
-
-    if (canvasStore.penType === "line") {
-      updatePosition(e);
-      draw();
-    }
   };
 
   const updatePosition = e => {

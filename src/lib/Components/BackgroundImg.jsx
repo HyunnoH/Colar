@@ -1,15 +1,16 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { css } from "emotion";
 import { useDispatch } from "react-redux";
 import { changeWidth, changeHeight } from "../../store/ImageState";
+import { setImg } from "../../store/CanvasInfo";
 
 const BackgroundImg = ({ imgPath }) => {
   const dispatch = useDispatch();
   const imgRef = useRef();
 
   useEffect(() => {
-    console.log(imgPath);
     imgRef.current.src = imgPath;
+    dispatch(setImg(imgRef.current));
   }, [imgPath]);
 
   return (
