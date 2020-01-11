@@ -8,11 +8,13 @@ const SketchPickerContainer = () => {
   const dispatch = useDispatch();
 
   const handleChangeComplete = color => {
+    console.log(color.hex);
     dispatch(changeColor(color.hex));
   };
 
   return (
     <SketchPicker
+      disableAlpha={false}
       color={selectedColor.color}
       onChangeComplete={handleChangeComplete}
     />

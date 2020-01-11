@@ -11,7 +11,7 @@ const BackgroundImg = ({ imgPath }) => {
   useEffect(() => {
     imgRef.current.src = imgPath;
     dispatch(setImg(imgRef.current));
-  }, [imgPath]);
+  }, [imgPath, dispatch]);
 
   return (
     <img
@@ -30,6 +30,7 @@ const BackgroundImg = ({ imgPath }) => {
 const imgClass = css`
   position: absolute;
   z-index: 2;
+  pointer-events: none;
 `;
 
 export default BackgroundImg;

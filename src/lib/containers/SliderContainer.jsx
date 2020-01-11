@@ -4,9 +4,9 @@ import Slider from "../Components/Slider";
 import { changeThickness } from "../../store/CanvasStyle";
 
 const SliderContainer = () => {
-  const sliderRef = useRef();
+  // const sliderRef = useRef();
   const value = useRef(5);
-  const selectedThickness = useSelector(state => state.CanvasStyle);
+  const canvasStyle = useSelector(state => state.CanvasStyle);
   const dispatch = useDispatch();
 
   const handleSliderChange = () => {
@@ -23,7 +23,7 @@ const SliderContainer = () => {
       max="40"
       value={value.current}
       onChange={handleSliderChange}
-      displayValue={String(selectedThickness.thickness)}
+      displayValue={String(canvasStyle.thickness)}
     />
   );
 };

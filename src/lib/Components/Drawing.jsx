@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { css } from "emotion";
 import { setCanvas, setContext } from "../../store/CanvasInfo";
 
-const Drawing = ({ width, height, scrollPosition }) => {
+const Drawing = ({ scrollPosition }) => {
   const [rect, setRect] = useState();
 
   const canvasStore = useSelector(state => state.CanvasStyle);
@@ -22,53 +22,51 @@ const Drawing = ({ width, height, scrollPosition }) => {
     setRect(canvasRef.current.getBoundingClientRect());
     dispatch(setContext(ctx.current));
     dispatch(setCanvas(canvasRef.current));
-  }, []);
+  }, [dispatch]);
 
   const handleMouseDown = e => {
     if (e.button) return;
 
     updatePosition(e);
-    const { x, y } = curr.current;
+    // const { x, y } = curr.current;
 
     isDrawing.current = true;
 
     ctx.current.fillStyle = canvasStore.color;
     ctx.current.lineWidth = canvasStore.thickness;
     ctx.current.lineCap = "round";
-
     ctx.current.beginPath();
-    if (canvasStore.penType === "eraser") {
-      ctx.current.arc(x, y, canvasStore.thickness, 0, Math.PI * 2);
-      ctx.current.clip();
-      ctx.current.clearRect(
-        0,
-        0,
-        ctx.current.scrollWidth,
-        ctx.current.scrollHeight
-      );
-      ctx.current.restore();
-      // ctx.current.resetClip();
-    } else {
-      ctx.current.fillRect(x, y, 2, 2);
-    }
+
+    ctx.current.globalCompositeOperation =
+      canvasStore.penType === "eraser" ? "destination-out" : "source-over";
+    // if (canvasStore.penType === "eraser") {
+    //   ctx.current.globalCompositeOperation = "destination-out";
+
+    // } else {
+    //   ctx.current.globalCompositeOperation = "source-over";
+    // }
+    updatePosition(e);
+    draw();
     ctx.current.closePath();
   };
 
   const handleMouseMove = e => {
     if (!isDrawing.current || canvasStore.penType === "line") return;
+
     updatePosition(e);
+
     if (canvasStore.penType === "brush") {
+      ctx.current.globalCompositeOperation = "source-over";
       draw();
     } else if (canvasStore.penType === "eraser") {
-      const { x, y } = curr.current;
-      ctx.current.beginPath();
-      ctx.current.clearRect(
-        x - canvasStore.thickness / 2,
-        y - canvasStore.thickness / 2,
-        canvasStore.thickness,
-        canvasStore.thickness
-      );
-      ctx.current.closePath();
+      // const { x, y } = curr.current;
+      // ctx.current.beginPath();
+      // ctx.current.arc(x, y, canvasStore.thickness, 0, Math.PI * 2, false);
+      // ctx.current.fillStyle = "#000";
+      // ctx.current.fill();
+      // ctx.current.closePath();
+      ctx.current.globalCompositeOperation = "destination-out";
+      draw();
     }
   };
 

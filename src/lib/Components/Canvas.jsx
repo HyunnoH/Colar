@@ -13,7 +13,7 @@ const Canvas = ({ imagePath }) => {
 
   useEffect(() => {
     dispatch(setDiv(divRef.current));
-  }, []);
+  }, [dispatch]);
 
   const updateScrollPosition = () => {
     setScrollPosition({

@@ -1,1 +1,7 @@
-use ReactiveX (Rx) to draw image more comportably
+Long Term:
+    use ReactiveX (Rx) to draw image more comportably
+
+Short Term:
+    draw circle around mouse pointer;
+    line follows mouse pointer until mouse up
+    image encoding to base64
