@@ -21,7 +21,7 @@ const Topbar = () => {
   };
 
   const sendToServer = () => {
-    // console.log(canvasInfo.img.toDataURL(), canvasInfo.canvas.toDataURL());
+    console.log(canvasInfo.canvas.toDataURL());
   };
 
   return (
