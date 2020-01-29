@@ -2,12 +2,14 @@ import React from "react";
 import { css } from "emotion";
 import SketchPickerContainer from "../containers/SketchPickerContainer";
 import SliderContainer from "../containers/SliderContainer";
+import ZoomerContainer from "../containers/ZoomerContainer";
 
 const Sidebar = () => {
   return (
     <aside className={pickerStyle}>
       <SketchPickerContainer />
       <SliderContainer />
+      <ZoomerContainer />
     </aside>
   );
 };

@@ -15,6 +15,7 @@ const Drawing = ({ scrollPosition }) => {
   const canvasRef = useRef();
   const isEntered = useRef(false);
   const isDrawing = useRef(false);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -55,19 +56,7 @@ const Drawing = ({ scrollPosition }) => {
 
     updatePosition(e);
 
-    if (canvasStore.penType === "brush") {
-      ctx.current.globalCompositeOperation = "source-over";
-      draw();
-    } else if (canvasStore.penType === "eraser") {
-      // const { x, y } = curr.current;
-      // ctx.current.beginPath();
-      // ctx.current.arc(x, y, canvasStore.thickness, 0, Math.PI * 2, false);
-      // ctx.current.fillStyle = "#000";
-      // ctx.current.fill();
-      // ctx.current.closePath();
-      ctx.current.globalCompositeOperation = "destination-out";
-      draw();
-    }
+    draw();
   };
 
   const handleMouseUp = e => {
