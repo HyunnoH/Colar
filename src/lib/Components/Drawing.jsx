@@ -118,6 +118,7 @@ const canvasStyle = css`
   position: absolute;
   overflow: hidden;
   z-index: 3;
+  cursor: none;
 `;
 
 export default Drawing;

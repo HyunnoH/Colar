@@ -23,6 +23,7 @@ const cursor = css`
   box-sizing: border-box;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  z-index: 2;
+  z-index: 4;
+  pointer-events: none;
 `;
 export default Cursor;
