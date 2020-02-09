@@ -9,7 +9,6 @@ import Cursor from "../Tools/Cursor";
 const Canvas = ({ imagePath }) => {
   const [scrollPosition, setScrollPosition] = useState({ left: 0, top: 0 });
   const dispatch = useDispatch();
-  const cursorRef = useRef();
   const divRef = useRef();
 
   useEffect(() => {
