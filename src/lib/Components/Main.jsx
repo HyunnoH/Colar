@@ -13,9 +13,10 @@ const Main = () => {
 
   const selectFile = useCallback(async () => {
     const { filePaths } = await remote.dialog.showOpenDialog();
+    console.log(filePaths);
 
     if (filePaths.length) {
-      setPath(filePaths[0]);
+      setPath(`file://${filePaths[0]}`);
       setState(1);
     }
   }, [setState, setPath]);
