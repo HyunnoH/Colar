@@ -52,13 +52,9 @@ const Drawing = ({ scrollPosition }) => {
     if (!timer) {
       timer = setTimeout(() => {
         timer = null;
-        curr.current = {
-          x: e.clientX - rect.left + scrollPosition.left,
-          y: e.clientY - rect.top + scrollPosition.top
-        };
         // updatePosition(e);
-        dispatch(updateLeft(curr.current.x));
-        dispatch(updateTop(curr.current.y));
+        dispatch(updateLeft(e.clientX - rect.left + scrollPosition.left));
+        dispatch(updateTop(e.clientY - rect.top + scrollPosition.top));
       }, 16);
     }
     if (!isDrawing.current || canvasStore.penType === "line") return;
