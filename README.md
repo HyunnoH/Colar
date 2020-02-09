@@ -1,6 +1,6 @@
 # Colar
 
-Colar is Simple, but powerfull client program for auto-painting. Colar uses [Electron](https://electronjs.org/), the framework for making cross-platform desktop app using javascript, HTML, CSS.
+Colar is Simple, but powerful client program for auto-painting. Colar uses [Electron](https://electronjs.org/), the framework for making cross-platform desktop app using javascript, HTML, CSS.
 
 # How to use
 
