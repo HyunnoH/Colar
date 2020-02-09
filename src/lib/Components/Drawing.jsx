@@ -56,7 +56,7 @@ const Drawing = ({ scrollPosition }) => {
           x: e.clientX - rect.left + scrollPosition.left,
           y: e.clientY - rect.top + scrollPosition.top
         };
-        console.log(curr.current.x);
+        // updatePosition(e);
         dispatch(updateLeft(curr.current.x));
         dispatch(updateTop(curr.current.y));
       }, 16);

@@ -12,8 +12,7 @@ const Main = () => {
   const [path, setPath] = useState("");
 
   const selectFile = useCallback(async () => {
-    const { filePaths } = await remote.dialog.showOpenDialog();
-    console.log(filePaths);
+    const { filePaths } = await remote.dialog.showOpenDialog(dialogOption);
 
     if (filePaths.length) {
       setPath(`file://${filePaths[0]}`);
@@ -46,6 +45,12 @@ const Main = () => {
     </>
   );
 };
+
+const dialogOption = {
+  properties: ["openFile"],
+  filters: [{ name: "Images", extensions: ["jpg", "jpeg", "png"] }]
+};
+
 const bodyDiv = css`
   display: flex;
   flex-direction: row;
