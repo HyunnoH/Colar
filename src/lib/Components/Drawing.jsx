@@ -15,7 +15,6 @@ const Drawing = ({ scrollPosition }) => {
   const curr = useRef({ x: 0, y: 0 });
   const canvasRef = useRef();
   let timer;
-  const isEntered = useRef(false);
   const isDrawing = useRef(false);
 
   const dispatch = useDispatch();
@@ -74,7 +73,11 @@ const Drawing = ({ scrollPosition }) => {
     isDrawing.current = false;
 
     if (canvasStore.penType === "line") {
-      updatePosition(e);
+      // updatePosition(e);
+      curr.current = {
+        x: e.clientX - rect.left + scrollPosition.left,
+        y: e.clientY - rect.top + scrollPosition.top
+      };
       draw();
     }
   };
@@ -97,12 +100,8 @@ const Drawing = ({ scrollPosition }) => {
     };
   };
 
-  const handleMouseEnter = () => {
-    isEntered.current = true;
-  };
-
   const handleMouseOut = () => {
-    isEntered.current = false;
+    isDrawing.current = false;
   };
 
   return (
@@ -114,7 +113,6 @@ const Drawing = ({ scrollPosition }) => {
       className={canvasStyle}
       width={backgroundImgState.width}
       height={backgroundImgState.height}
-      onMouseEnter={handleMouseEnter}
       onMouseOut={handleMouseOut}
     />
   );

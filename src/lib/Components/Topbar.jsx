@@ -12,6 +12,7 @@ const Topbar = () => {
   };
 
   const handleClear = () => {
+    if (!canvasInfo.context) return;
     canvasInfo.context.clearRect(
       0,
       0,
@@ -21,6 +22,7 @@ const Topbar = () => {
   };
 
   const sendToServer = () => {
+    if (!canvasInfo.context) return;
     console.log(canvasInfo.canvas.toDataURL());
   };
 

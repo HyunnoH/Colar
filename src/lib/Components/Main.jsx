@@ -2,7 +2,6 @@ import React, { useState, useCallback } from "react";
 import { remote } from "electron";
 import { css } from "emotion";
 import { Button } from "reactstrap";
-// import SelectedImage from "./SelectedImage";
 import Topbar from "./Topbar";
 import Canvas from "./Canvas";
 import Sidebar from "./Sidebar";
