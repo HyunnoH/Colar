@@ -28,7 +28,6 @@ const Drawing = ({ scrollPosition }) => {
     if (e.button) return;
 
     updatePosition(e);
-    // const { x, y } = curr.current;
 
     isDrawing.current = true;
 
@@ -39,12 +38,7 @@ const Drawing = ({ scrollPosition }) => {
 
     ctx.current.globalCompositeOperation =
       canvasStore.penType === "eraser" ? "destination-out" : "source-over";
-    // if (canvasStore.penType === "eraser") {
-    //   ctx.current.globalCompositeOperation = "destination-out";
 
-    // } else {
-    //   ctx.current.globalCompositeOperation = "source-over";
-    // }
     updatePosition(e);
     draw();
     ctx.current.closePath();
@@ -55,19 +49,9 @@ const Drawing = ({ scrollPosition }) => {
 
     updatePosition(e);
 
-    if (canvasStore.penType === "brush") {
-      ctx.current.globalCompositeOperation = "source-over";
-      draw();
-    } else if (canvasStore.penType === "eraser") {
-      // const { x, y } = curr.current;
-      // ctx.current.beginPath();
-      // ctx.current.arc(x, y, canvasStore.thickness, 0, Math.PI * 2, false);
-      // ctx.current.fillStyle = "#000";
-      // ctx.current.fill();
-      // ctx.current.closePath();
-      ctx.current.globalCompositeOperation = "destination-out";
-      draw();
-    }
+    ctx.current.globalCompositeOperation =
+      canvasStore.penType === "brush" ? "source-over" : "destionation-out";
+    draw();
   };
 
   const handleMouseUp = e => {
@@ -75,7 +59,6 @@ const Drawing = ({ scrollPosition }) => {
 
     if (canvasStore.penType === "line") {
       updatePosition(e);
-      // console.log(prev.current, curr.current);
       draw();
     }
   };
