@@ -1,15 +1,25 @@
-import React, { useRef } from "react";
+import React from "react";
 import { css } from "emotion";
+import { useSelector } from "react-redux";
 
-const Cursor = ({ reff }) => {
-  return <div className={cursor} ref={reff}></div>;
+const Cursor = () => {
+  const cursorStyle = useSelector(state => state.CanvasStyle);
+
+  return (
+    <div
+      className={cursor}
+      style={{
+        width: Number(cursorStyle.thickness),
+        height: Number(cursorStyle.thickness),
+        border: "2px solid " + cursorStyle.color,
+        left: cursorStyle.left,
+        top: cursorStyle.top
+      }}></div>
+  );
 };
 
 const cursor = css`
   position: absolute;
-  width: 20px;
-  height: 20px;
-  border: 2px solid red;
   box-sizing: border-box;
   transform: translate(-50%, -50%);
   border-radius: 50%;

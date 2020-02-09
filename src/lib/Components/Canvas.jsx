@@ -27,6 +27,7 @@ const Canvas = ({ imagePath }) => {
     <div ref={divRef} className={stageClass} onScroll={updateScrollPosition}>
       <BackgroundImage imgPath={imagePath} />
       <Drawing scrollPosition={scrollPosition} />
+      <Cursor></Cursor>
     </div>
   );
 };

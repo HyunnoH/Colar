@@ -7,6 +7,7 @@ export const setCanvas = canvas => ({
   type: CANVAS,
   canvas
 });
+
 export const setContext = context => ({
   type: CONTEXT,
   context
@@ -51,6 +52,7 @@ export default function CanvasInfo(state = initialState, action) {
         ...state,
         img: action.img
       };
+
     default:
       return state;
   }

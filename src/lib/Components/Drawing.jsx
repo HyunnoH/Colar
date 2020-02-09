@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { css } from "emotion";
 import { setCanvas, setContext } from "../../store/CanvasInfo";
+import { updateLeft, updateTop } from "../../store/CanvasStyle";
 
 const Drawing = ({ scrollPosition }) => {
   const [rect, setRect] = useState();
@@ -13,8 +14,10 @@ const Drawing = ({ scrollPosition }) => {
   const prev = useRef({ x: 0, y: 0 });
   const curr = useRef({ x: 0, y: 0 });
   const canvasRef = useRef();
+  let timer;
   const isEntered = useRef(false);
   const isDrawing = useRef(false);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -45,6 +48,19 @@ const Drawing = ({ scrollPosition }) => {
   };
 
   const handleMouseMove = e => {
+    e.persist();
+    if (!timer) {
+      timer = setTimeout(() => {
+        timer = null;
+        curr.current = {
+          x: e.clientX - rect.left + scrollPosition.left,
+          y: e.clientY - rect.top + scrollPosition.top
+        };
+        console.log(curr.current.x);
+        dispatch(updateLeft(curr.current.x));
+        dispatch(updateTop(curr.current.y));
+      }, 16);
+    }
     if (!isDrawing.current || canvasStore.penType === "line") return;
 
     updatePosition(e);
