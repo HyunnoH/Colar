@@ -21,7 +21,7 @@
   "scripts": {
     "react-start": "react-scripts start",
     "react-build": "react-scripts build",
-    "start": "tsc --esModuleInterop ./src/infrastructure/electron/electron.ts && concurrently \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3000 && electron .\"",
+    "start": "tsc --build tsconfig.electron.json && concurrently \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3000 && electron .\"",
     "build": "yarn react-build && electron-builder",
     "electron-builder": "echo \"This is not implemented!\"",
     "test": "react-scripts test",
