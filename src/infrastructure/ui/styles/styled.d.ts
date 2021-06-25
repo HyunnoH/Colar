@@ -2,9 +2,13 @@ import "styled-components";
 
 declare module "styled-components" {
   export interface DefaultTheme {
-    workspaceBackground: string;
-    mainBackground: string;
-    borderColor: string;
+    baseColor: string;
+    canvasBackground: string;
+    inputBackground: string;
+    pannelBackground: string;
+    lightBorder: string;
+    darkBorder: string;
     textColor: string;
+    alpha: string;
   }
 }

@@ -1,17 +1,22 @@
-import { forwardRef } from "react";
 import styled, { css } from "styled-components";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  active?: boolean;
   selected?: boolean;
 }
 
 const StyledButton = styled.button<ButtonProps>`
+  cursor: pointer;
+
   ${(props) => {
+    const { active, theme } = props;
+    const { alpha, textColor, baseColor } = theme;
+
     return css`
-      padding: 8px 16px;
+      padding: 2px 5px 3px 5px;
       border: none;
-      color: ${props.theme.textColor};
-      background-color: ${props.theme.mainBackground};
+      color: ${textColor};
+      background-color: ${active ? `rgba(0, 0, 0, ${alpha})` : baseColor};
     `;
   }}
 `;

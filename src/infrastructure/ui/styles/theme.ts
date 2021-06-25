@@ -1,8 +1,12 @@
 import { DefaultTheme } from "styled-components";
 
 export const theme: DefaultTheme = {
-  workspaceBackground: "#1e1e1e",
-  mainBackground: "#414141",
-  borderColor: "#2a2a2a",
+  baseColor: "#323232",
+  canvasBackground: "#191919",
+  inputBackground: "",
+  pannelBackground: "",
+  lightBorder: "",
+  darkBorder: "#2a2a2a",
   textColor: "#ffffff",
+  alpha: "0.25",
 };

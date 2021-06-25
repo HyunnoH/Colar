@@ -15,7 +15,7 @@ function convertEventName(eventName: DropdownEvent): string {
 }
 
 export default function Dropdown({ children, menu, trigger }: DropdownProps) {
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(true);
 
   const triggers = trigger
     ? Array.isArray(trigger)
@@ -30,9 +30,14 @@ export default function Dropdown({ children, menu, trigger }: DropdownProps) {
         }
     : {};
 
-  useEffect(() => {
-    console.log(visible);
-  }, [visible]);
+  // useEffect(() => {
+  //   console.log(visible);
+  // }, [visible]);
 
-  return <div {...triggers}>{children}</div>;
+  return (
+    <div {...triggers} onBlur={() => setVisible(false)}>
+      {children}
+      {visible && menu}
+    </div>
+  );
 }

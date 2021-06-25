@@ -12,8 +12,8 @@ const MenuBar = styled.div`
   height: 40px;
   ${(props) => {
     return css`
-      background-color: ${props.theme.mainBackground};
-      border-bottom: 2px solid ${props.theme.borderColor};
+      background-color: ${props.theme.baseColor};
+      border-bottom: 2px solid ${props.theme.darkBorder};
     `;
   }}
 `;
@@ -26,16 +26,16 @@ export default function MenuBarLayout({ children }: MenuBarLayoutProps) {
   return (
     <Frame>
       <MenuBar>
-        <Dropdown
+        {/* <Dropdown
           menu={
             <Menu>
-              <div></div>
+              <div>123</div>
             </Menu>
           }
           trigger="click"
         >
           <Button>File</Button>
-        </Dropdown>
+        </Dropdown> */}
       </MenuBar>
       <MenuBar></MenuBar>
       {children}
