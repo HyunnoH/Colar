@@ -1,7 +1,8 @@
 import styled, { css } from "styled-components";
 
 const WorkspaceBackground = styled.div`
-  height: calc(100vh - 48px);
+  flex: 1;
+  height: calc(100vh - 68px);
   ${(props) => {
     const backgroundColor = props.theme.canvasBackground;
     return css`

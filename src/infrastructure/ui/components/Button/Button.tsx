@@ -7,7 +7,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 const StyledButton = styled.button<ButtonProps>`
   cursor: pointer;
-
+  margin: 4px;
   ${(props) => {
     const { active, theme } = props;
     const { alpha, textColor, baseColor } = theme;

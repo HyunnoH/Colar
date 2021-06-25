@@ -1,7 +1,36 @@
 import { ReactNode } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
-const Frame = styled.div``;
+import Button from "../../components/Button";
+import { FaPaintBrush } from "react-icons/fa";
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  ${(props) => {
+    return css`
+      color: ${props.theme.textColor};
+    `;
+  }}
+`;
+
+const Toolbar = styled.div`
+  width: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 8px;
+
+  > button > svg {
+    font-size: 20px;
+  }
+
+  ${(props) => {
+    return css`
+      background-color: ${props.theme.baseColor};
+    `;
+  }}
+`;
 
 interface ToolBarLayoutProps {
   children: ReactNode;
@@ -9,9 +38,13 @@ interface ToolBarLayoutProps {
 
 export default function ToolBarLayout({ children }: ToolBarLayoutProps) {
   return (
-    <>
-      <Frame></Frame>
+    <Wrapper>
+      <Toolbar>
+        <Button>
+          <FaPaintBrush />
+        </Button>
+      </Toolbar>
       {children}
-    </>
+    </Wrapper>
   );
 }
