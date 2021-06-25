@@ -1,5 +1,8 @@
 import { ReactNode } from "react";
 import styled, { css } from "styled-components";
+import Button from "../../components/Button";
+import Dropdown from "../../components/Dropdown";
+import Menu from "../../components/Menu";
 
 const Frame = styled.div`
   height: 100vh;
@@ -22,7 +25,18 @@ interface MenuBarLayoutProps {
 export default function MenuBarLayout({ children }: MenuBarLayoutProps) {
   return (
     <Frame>
-      <MenuBar></MenuBar>
+      <MenuBar>
+        <Dropdown
+          menu={
+            <Menu>
+              <div></div>
+            </Menu>
+          }
+          trigger="click"
+        >
+          <Button>File</Button>
+        </Dropdown>
+      </MenuBar>
       <MenuBar></MenuBar>
       {children}
     </Frame>

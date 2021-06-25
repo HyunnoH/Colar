@@ -1,17 +1,23 @@
-import styled from "styled-components";
+import { forwardRef } from "react";
+import styled, { css } from "styled-components";
 
-interface ButtonProps
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "type"> {
-  type?: "normal" | "primary" | "ghost";
-  htmlType?: React.ButtonHTMLAttributes<HTMLButtonElement>["type"];
-  danger?: boolean;
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  selected?: boolean;
 }
 
-export default function Button({
-  children,
-  type,
-  danger,
-  ...restProps
-}: ButtonProps) {
-  return <button {...restProps}>{children}</button>;
+const StyledButton = styled.button<ButtonProps>`
+  ${(props) => {
+    return css`
+      padding: 8px 16px;
+      border: none;
+      color: ${props.theme.textColor};
+      background-color: ${props.theme.mainBackground};
+    `;
+  }}
+`;
+
+function Button({ children, selected, ...restProps }: ButtonProps) {
+  return <StyledButton {...restProps}>{children}</StyledButton>;
 }
+
+export default Button;

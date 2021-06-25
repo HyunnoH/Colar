@@ -5,5 +5,6 @@ declare module "styled-components" {
     workspaceBackground: string;
     mainBackground: string;
     borderColor: string;
+    textColor: string;
   }
 }
