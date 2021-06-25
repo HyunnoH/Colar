@@ -1,14 +1,18 @@
 import { ReactNode } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 const Frame = styled.div`
   height: 100vh;
-  background-color: darkgray;
 `;
 
 const MenuBar = styled.div`
-  height: 48px;
-  background-color: gray;
+  height: 40px;
+  ${(props) => {
+    return css`
+      background-color: ${props.theme.mainBackground};
+      border-bottom: 2px solid ${props.theme.borderColor};
+    `;
+  }}
 `;
 
 interface MenuBarLayoutProps {
@@ -18,6 +22,7 @@ interface MenuBarLayoutProps {
 export default function MenuBarLayout({ children }: MenuBarLayoutProps) {
   return (
     <Frame>
+      <MenuBar></MenuBar>
       <MenuBar></MenuBar>
       {children}
     </Frame>

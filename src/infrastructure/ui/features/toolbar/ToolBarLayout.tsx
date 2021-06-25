@@ -8,5 +8,10 @@ interface ToolBarLayoutProps {
 }
 
 export default function ToolBarLayout({ children }: ToolBarLayoutProps) {
-  return <Frame>{children}</Frame>;
+  return (
+    <>
+      <Frame></Frame>
+      {children}
+    </>
+  );
 }

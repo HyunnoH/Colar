@@ -6,7 +6,7 @@ import "./index.css";
 
 import App from "./infrastructure/ui/App";
 import reportWebVitals from "./reportWebVitals";
-import theme from "./infrastructure/ui/theme.json";
+import { theme } from "./infrastructure/ui/styles/theme";
 
 ReactDOM.render(
   <React.StrictMode>

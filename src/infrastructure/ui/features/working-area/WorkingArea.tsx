@@ -1,9 +1,9 @@
 import styled, { css } from "styled-components";
 
 const WorkspaceBackground = styled.div`
-  height: 100%;
+  height: calc(100vh - 48px);
   ${(props) => {
-    const backgroundColor = props.theme.background;
+    const backgroundColor = props.theme.workspaceBackground;
     return css`
       background-color: ${backgroundColor};
     `;
