@@ -21,8 +21,11 @@ const Toolbar = styled.div`
   align-items: center;
   padding-top: 8px;
 
-  > button > svg {
-    font-size: 20px;
+  > button {
+    padding: 5px 5px 2px 5px;
+    > svg {
+      font-size: 18px;
+    }
   }
 
   ${(props) => {
