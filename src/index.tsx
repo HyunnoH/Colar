@@ -1,18 +1,24 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { Provider as ReduxProvider } from "react-redux";
 import { ThemeProvider } from "styled-components";
 
 import "./index.css";
 
-import App from "./infrastructure/ui/App";
+import App from "./infrastructure/ui/features/app";
 import reportWebVitals from "./reportWebVitals";
 import { theme } from "./infrastructure/ui/styles/theme";
+import { configureStore } from "./infrastructure/stores";
+
+const store = configureStore();
 
 ReactDOM.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <App />
-    </ThemeProvider>
+    <ReduxProvider store={store}>
+      <ThemeProvider theme={theme}>
+        <App />
+      </ThemeProvider>
+    </ReduxProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );
