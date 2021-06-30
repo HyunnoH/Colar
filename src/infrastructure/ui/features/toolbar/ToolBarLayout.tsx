@@ -1,8 +1,13 @@
 import { ReactNode } from "react";
 import styled, { css } from "styled-components";
+import { FaEraser, FaPaintBrush } from "react-icons/fa";
 
 import Button from "../../components/Button";
-import { FaPaintBrush } from "react-icons/fa";
+
+import {
+  useToolbar,
+  useToolbarItem,
+} from "../../../stores/modules/toolbar/hooks";
 
 const Wrapper = styled.div`
   display: flex;
@@ -40,11 +45,23 @@ interface ToolBarLayoutProps {
 }
 
 export default function ToolBarLayout({ children }: ToolBarLayoutProps) {
+  const mod = useToolbarItem();
+  const { changeMod } = useToolbar();
+
   return (
     <Wrapper>
       <Toolbar>
-        <Button>
+        <Button
+          active={mod === "brush" ? true : undefined}
+          onClick={() => changeMod("brush")}
+        >
           <FaPaintBrush />
+        </Button>
+        <Button
+          active={mod === "eraser" ? true : undefined}
+          onClick={() => changeMod("eraser")}
+        >
+          <FaEraser />
         </Button>
       </Toolbar>
       {children}

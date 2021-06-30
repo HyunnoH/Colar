@@ -1,5 +1,7 @@
 import React, { useCallback, useRef } from "react";
+import { useEffect } from "react";
 import styled, { css } from "styled-components";
+import { useToolbarItem } from "../../../stores/modules/toolbar/hooks";
 
 const WorkspaceBackground = styled.div`
   display: flex;
@@ -30,6 +32,11 @@ type Position2D = {
 export default function WorkingArea() {
   const isDrawing = useRef(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const mod = useToolbarItem();
+
+  useEffect(() => {
+    console.log(mod);
+  }, [mod]);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
