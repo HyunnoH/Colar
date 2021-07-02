@@ -8,6 +8,7 @@ import {
   useToolbar,
   useToolbarItem,
 } from "../../../stores/modules/toolbar/hooks";
+import ColorPicker from "../../components/ColorPicker";
 
 const Wrapper = styled.div`
   display: flex;
@@ -20,7 +21,6 @@ const Wrapper = styled.div`
 `;
 
 const Toolbar = styled.div`
-  width: 48px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -40,6 +40,15 @@ const Toolbar = styled.div`
   }}
 `;
 
+const LeftToolbar = styled(Toolbar)`
+  width: 48px;
+`;
+
+const RightToolbar = styled(Toolbar)`
+  padding-left: 12px;
+  padding-right: 12px;
+`;
+
 interface ToolBarLayoutProps {
   children: ReactNode;
 }
@@ -50,7 +59,7 @@ export default function ToolBarLayout({ children }: ToolBarLayoutProps) {
 
   return (
     <Wrapper>
-      <Toolbar>
+      <LeftToolbar>
         <Button
           active={mod === "brush" ? true : undefined}
           onClick={() => changeMod("brush")}
@@ -63,8 +72,11 @@ export default function ToolBarLayout({ children }: ToolBarLayoutProps) {
         >
           <FaEraser />
         </Button>
-      </Toolbar>
+      </LeftToolbar>
       {children}
+      <RightToolbar>
+        <ColorPicker />
+      </RightToolbar>
     </Wrapper>
   );
 }
