@@ -1,5 +1,7 @@
-import { useRef } from "react";
+import React, { useRef, useState } from "react";
 import styled, { css } from "styled-components";
+import chroma from "chroma-js";
+import { useCallback } from "react";
 
 const HueSpectrumBar = styled.div`
   width: 300px;
@@ -17,11 +19,7 @@ const HueSpectrumBar = styled.div`
   margin-bottom: 20px;
 `;
 
-const Background = styled.div<{ backgroundColor: string }>`
-  ${(props) => css`
-    background-color: ${props.backgroundColor};
-  `}
-
+const Background = styled.div`
   height: 200px;
   position: relative;
 `;
@@ -41,13 +39,64 @@ const BrightnessLayer = styled.div`
 `;
 
 export default function ColorPicker() {
+  const [hue, setHue] = useState("#ff0000");
+  const isClicked = useRef(false);
+
+  const computeHue = useCallback(
+    (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      const h = (e.nativeEvent.offsetX / e.currentTarget.offsetWidth) * 360;
+      setHue(chroma.hsl(h, 1, 0.5).hex());
+    },
+    []
+  );
+
+  const handleHueDown = useCallback(
+    (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      isClicked.current = true;
+      computeHue(e);
+    },
+    []
+  );
+
+  const handleHueMove = useCallback(
+    (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      if (!isClicked.current) return;
+      computeHue(e);
+    },
+    []
+  );
+
   return (
     <div>
-      <HueSpectrumBar />
-      <Background backgroundColor={"#ff0000"}>
-        <SaturationLayer>
-          <BrightnessLayer />
-        </SaturationLayer>
+      <HueSpectrumBar
+        onMouseDown={handleHueDown}
+        onMouseMove={handleHueMove}
+        onMouseUp={() => {
+          isClicked.current = false;
+        }}
+      />
+      <Background
+        style={{
+          backgroundColor: hue,
+        }}
+        onMouseDown={(e) => {
+          isClicked.current = true;
+          console.log(e.currentTarget.offsetWidth);
+
+          console.log(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
+        }}
+        onMouseMove={(e) => {
+          if (!isClicked.current) {
+            return;
+          }
+          console.log(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
+        }}
+        onMouseUp={(e) => {
+          isClicked.current = false;
+        }}
+      >
+        <SaturationLayer />
+        <BrightnessLayer />
       </Background>
     </div>
   );
