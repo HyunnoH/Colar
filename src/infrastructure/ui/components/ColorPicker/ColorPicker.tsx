@@ -1,7 +1,11 @@
 import React, { useRef, useState } from "react";
-import styled, { css } from "styled-components";
-import chroma from "chroma-js";
+import styled from "styled-components";
+import chroma, { Color } from "chroma-js";
 import { useCallback } from "react";
+
+interface ColorPickerProps {
+  onColorChange?: (color: Color) => void;
+}
 
 const HueSpectrumBar = styled.div`
   width: 300px;
@@ -38,7 +42,7 @@ const BrightnessLayer = styled.div`
   background: linear-gradient(to bottom, #0000 0%, #000f 100%);
 `;
 
-export default function ColorPicker() {
+export default function ColorPicker({ onColorChange }: ColorPickerProps) {
   const [hue, setHue] = useState("#ff0000");
   const isClicked = useRef(false);
 
@@ -55,13 +59,43 @@ export default function ColorPicker() {
       isClicked.current = true;
       computeHue(e);
     },
-    []
+    [computeHue]
   );
 
   const handleHueMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       if (!isClicked.current) return;
       computeHue(e);
+    },
+    [computeHue]
+  );
+
+  const computeHSV = useCallback(
+    (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      const h = chroma(hue).hsl()[0];
+      const s = e.nativeEvent.offsetX / e.currentTarget.offsetWidth;
+      const v = e.nativeEvent.offsetY / e.currentTarget.offsetHeight;
+
+      const hsv = chroma.hsv(h, s, v);
+      console.log(hsv.rgb());
+    },
+    [hue]
+  );
+
+  const handleBackgroundMouseDown = useCallback(
+    (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      isClicked.current = true;
+      computeHSV(e);
+    },
+    [computeHSV]
+  );
+
+  const handleBackgroundMouseMove = useCallback(
+    (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      if (!isClicked.current) {
+        return;
+      }
+      computeHSV(e);
     },
     []
   );
@@ -79,19 +113,9 @@ export default function ColorPicker() {
         style={{
           backgroundColor: hue,
         }}
-        onMouseDown={(e) => {
-          isClicked.current = true;
-          console.log(e.currentTarget.offsetWidth);
-
-          console.log(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
-        }}
-        onMouseMove={(e) => {
-          if (!isClicked.current) {
-            return;
-          }
-          console.log(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
-        }}
-        onMouseUp={(e) => {
+        onMouseDown={handleBackgroundMouseDown}
+        onMouseMove={handleBackgroundMouseMove}
+        onMouseUp={() => {
           isClicked.current = false;
         }}
       >
