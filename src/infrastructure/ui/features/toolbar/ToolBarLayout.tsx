@@ -9,6 +9,7 @@ import {
   useToolbarItem,
 } from "../../../stores/modules/toolbar/hooks";
 import ColorPicker from "../../components/ColorPicker";
+import { useColor } from "../../../stores/modules/color";
 
 const Wrapper = styled.div`
   display: flex;
@@ -56,6 +57,7 @@ interface ToolBarLayoutProps {
 export default function ToolBarLayout({ children }: ToolBarLayoutProps) {
   const mod = useToolbarItem();
   const { changeMod } = useToolbar();
+  const { changeColor } = useColor();
 
   return (
     <Wrapper>
@@ -75,7 +77,7 @@ export default function ToolBarLayout({ children }: ToolBarLayoutProps) {
       </LeftToolbar>
       {children}
       <RightToolbar>
-        <ColorPicker />
+        <ColorPicker onColorChange={changeColor} />
       </RightToolbar>
     </Wrapper>
   );

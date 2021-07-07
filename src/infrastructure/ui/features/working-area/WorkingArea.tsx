@@ -2,6 +2,7 @@ import React, { useCallback, useRef } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import styled, { css } from "styled-components";
+import { useColorState } from "../../../stores/modules/color";
 import { useToolbarItem } from "../../../stores/modules/toolbar/hooks";
 
 const WorkspaceBackground = styled.div`
@@ -55,6 +56,7 @@ export default function WorkingArea() {
     width: 100,
     height: 100,
   });
+  const { color } = useColorState();
 
   useEffect(() => {
     setWrapperSize({
@@ -95,14 +97,12 @@ export default function WorkingArea() {
 
       changePosition(canvas, e);
 
-      const fillStyle = "black";
-
       if (mod === "brush") {
         ctx.beginPath();
         ctx.moveTo(previousPos.current.x, previousPos.current.y);
         ctx.lineTo(currentPos.current.x, currentPos.current.y);
         ctx.globalCompositeOperation = "source-over";
-        ctx.strokeStyle = fillStyle;
+        ctx.strokeStyle = color;
         ctx.lineWidth = 1;
         ctx.stroke();
         ctx.closePath();
@@ -111,13 +111,13 @@ export default function WorkingArea() {
         ctx.moveTo(previousPos.current.x, previousPos.current.y);
         ctx.lineTo(currentPos.current.x, currentPos.current.y);
         ctx.globalCompositeOperation = "destination-out";
-        ctx.strokeStyle = fillStyle;
+        ctx.strokeStyle = color;
         ctx.lineWidth = 1;
         ctx.stroke();
         ctx.closePath();
       }
     },
-    [mod]
+    [mod, color]
   );
 
   const handleMouseDown = useCallback(
@@ -133,11 +133,11 @@ export default function WorkingArea() {
       changePosition(canvas, e);
 
       ctx.beginPath();
-      ctx.fillStyle = "black";
+      ctx.fillStyle = color;
       ctx.fillRect(currentPos.current.x, currentPos.current.y, 2, 2);
       ctx.closePath();
     },
-    []
+    [color]
   );
 
   return (

@@ -3,6 +3,9 @@ import styled from "styled-components";
 import chroma, { Color } from "chroma-js";
 import { useCallback } from "react";
 
+import { useColorPickerReducer } from "./hooks/reducers";
+import { useEffect } from "react";
+
 interface ColorPickerProps {
   onColorChange?: (color: Color) => void;
 }
@@ -43,15 +46,26 @@ const BrightnessLayer = styled.div`
 `;
 
 export default function ColorPicker({ onColorChange }: ColorPickerProps) {
-  const [hue, setHue] = useState("#ff0000");
+  const [state, dispatch] = useColorPickerReducer();
+
+  useEffect(() => {
+    const { h, s, v } = state;
+    if (onColorChange) {
+      onColorChange(chroma.hsv(h, s, v));
+    }
+  }, [state, onColorChange]);
+
   const isClicked = useRef(false);
 
   const computeHue = useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       const h = (e.nativeEvent.offsetX / e.currentTarget.offsetWidth) * 360;
-      setHue(chroma.hsl(h, 1, 0.5).hex());
+      dispatch({
+        type: "h",
+        h: h,
+      });
     },
-    []
+    [dispatch]
   );
 
   const handleHueDown = useCallback(
@@ -72,14 +86,16 @@ export default function ColorPicker({ onColorChange }: ColorPickerProps) {
 
   const computeHSV = useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-      const h = chroma(hue).hsl()[0];
       const s = e.nativeEvent.offsetX / e.currentTarget.offsetWidth;
-      const v = e.nativeEvent.offsetY / e.currentTarget.offsetHeight;
+      const v = 1 - e.nativeEvent.offsetY / e.currentTarget.offsetHeight;
 
-      const hsv = chroma.hsv(h, s, v);
-      console.log(hsv.rgb());
+      dispatch({
+        type: "sv",
+        s,
+        v,
+      });
     },
-    [hue]
+    [state, dispatch]
   );
 
   const handleBackgroundMouseDown = useCallback(
@@ -87,17 +103,15 @@ export default function ColorPicker({ onColorChange }: ColorPickerProps) {
       isClicked.current = true;
       computeHSV(e);
     },
-    [computeHSV]
+    [computeHSV, onColorChange]
   );
 
-  const handleBackgroundMouseMove = useCallback(
+  const handleBackgroundMouseUp = useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-      if (!isClicked.current) {
-        return;
-      }
+      isClicked.current = false;
       computeHSV(e);
     },
-    []
+    [computeHSV, onColorChange]
   );
 
   return (
@@ -108,16 +122,19 @@ export default function ColorPicker({ onColorChange }: ColorPickerProps) {
         onMouseUp={() => {
           isClicked.current = false;
         }}
+        onMouseLeave={(e) => {
+          if (isClicked.current) {
+            isClicked.current = false;
+            computeHue(e);
+          }
+        }}
       />
       <Background
         style={{
-          backgroundColor: hue,
+          backgroundColor: chroma.hsv(state.h, 1, 1).hex(),
         }}
         onMouseDown={handleBackgroundMouseDown}
-        onMouseMove={handleBackgroundMouseMove}
-        onMouseUp={() => {
-          isClicked.current = false;
-        }}
+        onMouseUp={handleBackgroundMouseUp}
       >
         <SaturationLayer />
         <BrightnessLayer />
