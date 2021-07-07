@@ -55,7 +55,7 @@ interface ToolBarLayoutProps {
 }
 
 export default function ToolBarLayout({ children }: ToolBarLayoutProps) {
-  const mod = useToolbarItem();
+  const { mod } = useToolbarItem();
   const { changeMod } = useToolbar();
   const { changeColor } = useColor();
 

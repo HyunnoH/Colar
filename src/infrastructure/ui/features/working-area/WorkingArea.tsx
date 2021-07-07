@@ -50,7 +50,7 @@ export default function WorkingArea() {
     x: 0,
     y: 0,
   });
-  const mod = useToolbarItem();
+  const { mod, brushSize } = useToolbarItem();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [wrapperSize, setWrapperSize] = useState<Partial<Dimension2D>>({
     width: 100,
@@ -97,27 +97,28 @@ export default function WorkingArea() {
 
       changePosition(canvas, e);
 
+      ctx.beginPath();
+
       if (mod === "brush") {
-        ctx.beginPath();
-        ctx.moveTo(previousPos.current.x, previousPos.current.y);
-        ctx.lineTo(currentPos.current.x, currentPos.current.y);
         ctx.globalCompositeOperation = "source-over";
         ctx.strokeStyle = color;
-        ctx.lineWidth = 1;
-        ctx.stroke();
-        ctx.closePath();
       } else if (mod === "eraser") {
-        ctx.beginPath();
-        ctx.moveTo(previousPos.current.x, previousPos.current.y);
-        ctx.lineTo(currentPos.current.x, currentPos.current.y);
         ctx.globalCompositeOperation = "destination-out";
-        ctx.strokeStyle = color;
-        ctx.lineWidth = 1;
-        ctx.stroke();
-        ctx.closePath();
       }
+
+      console.log(brushSize);
+
+      ctx.arc(
+        currentPos.current.x,
+        currentPos.current.y,
+        brushSize,
+        0,
+        2 * Math.PI
+      );
+      ctx.fill();
+      ctx.closePath();
     },
-    [mod, color]
+    [mod, color, brushSize]
   );
 
   const handleMouseDown = useCallback(
@@ -137,7 +138,7 @@ export default function WorkingArea() {
       ctx.fillRect(currentPos.current.x, currentPos.current.y, 2, 2);
       ctx.closePath();
     },
-    [color]
+    [color, brushSize]
   );
 
   return (

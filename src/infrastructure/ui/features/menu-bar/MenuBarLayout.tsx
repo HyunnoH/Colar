@@ -1,6 +1,8 @@
 import { ReactNode } from "react";
 import styled, { css } from "styled-components";
+import { useToolbarItem } from "../../../stores/modules/toolbar/hooks";
 import Button from "../../components/Button";
+import BrushResizer from "./components/BrushResizer";
 // import Dropdown from "../../components/Dropdown";
 // import Menu from "../../components/Menu";
 
@@ -28,6 +30,8 @@ interface MenuBarLayoutProps {
 }
 
 export default function MenuBarLayout({ children }: MenuBarLayoutProps) {
+  const { mod } = useToolbarItem();
+
   return (
     <Frame>
       <MenuBar>
@@ -39,7 +43,7 @@ export default function MenuBarLayout({ children }: MenuBarLayoutProps) {
           <Button>File</Button>
         </span>
       </MenuBar>
-      <MenuBar></MenuBar>
+      <MenuBar>{["brush", "eraser"].includes(mod) && <BrushResizer />}</MenuBar>
       {children}
     </Frame>
   );

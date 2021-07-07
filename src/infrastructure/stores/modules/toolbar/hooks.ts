@@ -6,7 +6,7 @@ import { useCallback, useMemo } from "react";
 import { ToolbarMods } from "./types";
 
 export function useToolbarItem() {
-  return useSelector(({ toolbar }: RootState) => toolbar.mod);
+  return useSelector(({ toolbar }: RootState) => toolbar);
 }
 
 export function useToolbar() {
@@ -17,5 +17,13 @@ export function useToolbar() {
     [dispatch]
   );
 
-  return useMemo(() => ({ changeMod }), [changeMod]);
+  const changeBrushSize = useCallback(
+    (size: number) => dispatch(toolbarSlice.actions.changeBrushSize(size)),
+    [dispatch]
+  );
+
+  return useMemo(() => ({ changeMod, changeBrushSize }), [
+    changeMod,
+    changeBrushSize,
+  ]);
 }
