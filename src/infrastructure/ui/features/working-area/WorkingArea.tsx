@@ -65,6 +65,24 @@ export default function WorkingArea() {
     });
   }, []);
 
+  const stroke = useCallback(
+    (ctx: CanvasRenderingContext2D, isMouseDown: boolean = false) => {
+      if (mod === "brush") {
+        ctx.globalCompositeOperation = "source-over";
+      } else if (mod === "eraser") {
+        ctx.globalCompositeOperation = "destination-out";
+      }
+      isMouseDown
+        ? ctx.moveTo(currentPos.current.x, currentPos.current.y)
+        : ctx.moveTo(previousPos.current.x, previousPos.current.y);
+      ctx.lineTo(currentPos.current.x, currentPos.current.y);
+
+      ctx.lineWidth = brushSize;
+      ctx.stroke();
+    },
+    [brushSize, mod]
+  );
+
   const changePosition = useCallback(
     (
       canvas: HTMLCanvasElement,
@@ -88,27 +106,9 @@ export default function WorkingArea() {
       }
 
       changePosition(canvas, e);
-
-      ctx.beginPath();
-
-      if (mod === "brush") {
-        ctx.globalCompositeOperation = "source-over";
-        ctx.strokeStyle = color;
-      } else if (mod === "eraser") {
-        ctx.globalCompositeOperation = "destination-out";
-      }
-
-      ctx.arc(
-        currentPos.current.x,
-        currentPos.current.y,
-        brushSize,
-        0,
-        2 * Math.PI
-      );
-      ctx.fill();
-      ctx.closePath();
+      stroke(ctx);
     },
-    [mod, color, brushSize]
+    [stroke]
   );
 
   const handleMouseDown = useCallback(
@@ -124,11 +124,12 @@ export default function WorkingArea() {
       changePosition(canvas, e);
 
       ctx.beginPath();
-      ctx.fillStyle = color;
-      ctx.fillRect(currentPos.current.x, currentPos.current.y, 2, 2);
-      ctx.closePath();
+      ctx.lineCap = "round";
+      ctx.strokeStyle = color;
+
+      stroke(ctx, true);
     },
-    [color, brushSize]
+    [stroke, color]
   );
 
   return (
@@ -141,6 +142,12 @@ export default function WorkingArea() {
           onMouseMove={handleMouseMove}
           onMouseUp={() => {
             isDrawing.current = false;
+            const canvas = canvasRef.current;
+            const ctx = canvas?.getContext("2d");
+            if (!ctx) {
+              return;
+            }
+            ctx.closePath();
           }}
           onMouseDown={handleMouseDown}
         />
