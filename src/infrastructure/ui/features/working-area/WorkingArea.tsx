@@ -75,14 +75,6 @@ export default function WorkingArea() {
         x: e.clientX - canvas.offsetLeft,
         y: e.clientY - canvas.offsetTop,
       };
-
-      console.log(
-        "mousemove:",
-        "previouse:",
-        previousPos.current,
-        "current:",
-        currentPos.current
-      );
     },
     []
   );
@@ -105,8 +97,6 @@ export default function WorkingArea() {
       } else if (mod === "eraser") {
         ctx.globalCompositeOperation = "destination-out";
       }
-
-      console.log(brushSize);
 
       ctx.arc(
         currentPos.current.x,
