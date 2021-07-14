@@ -1,9 +1,11 @@
 import React, { useCallback, useRef } from "react";
-import { useState } from "react";
-import { useEffect } from "react";
 import styled, { css } from "styled-components";
+
+import { Position2D } from "../../../../core/position";
 import { useColorState } from "../../../stores/modules/color";
 import { useToolbarItem } from "../../../stores/modules/toolbar/hooks";
+import { ToolbarMods } from "../../../stores/modules/toolbar/types";
+import { useCanvasContext } from "../../hooks/useCanvasContext";
 
 const WorkspaceBackground = styled.div`
   display: flex;
@@ -11,37 +13,24 @@ const WorkspaceBackground = styled.div`
   justify-content: center;
   flex: 1;
   height: calc(100vh - 68px);
+  overflow-x: auto;
+  overflow-y: auto;
   ${(props) => {
     const backgroundColor = props.theme.canvasBackground;
     return css`
       background-color: ${backgroundColor};
     `;
   }}
+`;
 
+const CanvasWrapper = styled.div`
   canvas {
-    overflow-x: scroll;
     background-color: white;
   }
 `;
 
-const CanvasWrapper = styled.div`
-  width: 60%;
-  height: 60%;
-`;
-
-type Position2D = {
-  x: number;
-  y: number;
-};
-
-type Dimension2D = {
-  width: number;
-  height: number;
-};
-
 export default function WorkingArea() {
   const isDrawing = useRef(false);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
   const previousPos = useRef<Position2D>({
     x: 0,
     y: 0,
@@ -51,22 +40,22 @@ export default function WorkingArea() {
     y: 0,
   });
   const { mod, brushSize } = useToolbarItem();
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const [wrapperSize, setWrapperSize] = useState<Partial<Dimension2D>>({
-    width: 100,
-    height: 100,
-  });
-  const { color } = useColorState();
 
-  useEffect(() => {
-    setWrapperSize({
-      width: wrapperRef.current?.clientWidth,
-      height: wrapperRef.current?.clientHeight,
-    });
-  }, []);
+  const { color } = useColorState();
+  const { ctx, canvas, ref } = useCanvasContext();
 
   const stroke = useCallback(
-    (ctx: CanvasRenderingContext2D, isMouseDown: boolean = false) => {
+    ({
+      ctx,
+      isMouseDown = false,
+      brushSize,
+      mod,
+    }: {
+      ctx: CanvasRenderingContext2D;
+      isMouseDown?: boolean;
+      brushSize: number;
+      mod: ToolbarMods;
+    }) => {
       if (mod === "brush") {
         ctx.globalCompositeOperation = "source-over";
       } else if (mod === "eraser") {
@@ -80,7 +69,7 @@ export default function WorkingArea() {
       ctx.lineWidth = brushSize;
       ctx.stroke();
     },
-    [brushSize, mod]
+    []
   );
 
   const changePosition = useCallback(
@@ -99,22 +88,18 @@ export default function WorkingArea() {
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
-      const canvas = canvasRef.current;
-      const ctx = canvas?.getContext("2d");
-      if (!canvas || !isDrawing.current || !ctx) {
+      if (!isDrawing.current || !canvas || !ctx) {
         return;
       }
 
       changePosition(canvas, e);
-      stroke(ctx);
+      stroke({ ctx, brushSize, mod });
     },
-    [stroke]
+    [stroke, canvas, ctx, brushSize, mod]
   );
 
   const handleMouseDown = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
-      const canvas = canvasRef.current;
-      const ctx = canvas?.getContext("2d");
       if (e.button !== 0 || !canvas || !ctx) {
         return;
       }
@@ -127,23 +112,21 @@ export default function WorkingArea() {
       ctx.lineCap = "round";
       ctx.strokeStyle = color;
 
-      stroke(ctx, true);
+      stroke({ ctx, isMouseDown: true, brushSize, mod });
     },
-    [stroke, color]
+    [stroke, color, canvas, ctx, brushSize, mod]
   );
 
   return (
     <WorkspaceBackground>
-      <CanvasWrapper ref={wrapperRef}>
+      <CanvasWrapper>
         <canvas
-          ref={canvasRef}
-          width={wrapperSize.width}
-          height={wrapperSize.height}
+          ref={ref}
+          width={1200}
+          height={800}
           onMouseMove={handleMouseMove}
           onMouseUp={() => {
             isDrawing.current = false;
-            const canvas = canvasRef.current;
-            const ctx = canvas?.getContext("2d");
             if (!ctx) {
               return;
             }
