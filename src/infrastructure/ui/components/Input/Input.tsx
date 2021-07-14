@@ -5,8 +5,13 @@ import { InputProps } from "./types";
 
 const StyledInput = styled.input``;
 
-export default function Input({ children, ...restProps }: InputProps) {
-  return <StyledInput {...restProps}>{children}</StyledInput>;
+export default function Input({ label, ...restProps }: InputProps) {
+  return (
+    <div>
+      <span>{label}</span>
+      <StyledInput {...restProps} />
+    </div>
+  );
 }
 
 Input.Slide = InputSlide;

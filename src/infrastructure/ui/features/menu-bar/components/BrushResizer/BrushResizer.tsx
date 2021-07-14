@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import {
   useToolbar,
   useToolbarItem,
@@ -10,12 +9,15 @@ export default function BrushResizer() {
   const { brushSize } = useToolbarItem();
 
   return (
-    <Input.Slide
-      min={1}
-      max={96}
+    <Input
+      label="브러쉬 사이즈"
       value={brushSize}
-      onChange={(e) => changeBrushSize(parseInt(e.target.value))}
-      step={1}
-    ></Input.Slide>
+      onChange={(e) => {
+        if (e.target.value) changeBrushSize(parseInt(e.target.value));
+      }}
+      onBlur={(e) => {
+        changeBrushSize(e.target.value ? parseInt(e.target.value) : 0);
+      }}
+    />
   );
 }
