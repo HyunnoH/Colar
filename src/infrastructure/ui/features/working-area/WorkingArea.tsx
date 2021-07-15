@@ -122,8 +122,8 @@ export default function WorkingArea() {
       <CanvasWrapper>
         <canvas
           ref={ref}
-          width={1200}
-          height={800}
+          width={800}
+          height={600}
           onMouseMove={handleMouseMove}
           onMouseUp={() => {
             isDrawing.current = false;
